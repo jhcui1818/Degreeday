@@ -4,6 +4,10 @@ author: "Jinghan Cui, Siran Zhao, Kailun Huang, Sijia Li"
 date: "10/12/2017"
 output: pdf_document
 ---
+Our group used the monthly degree day data from Climate Prediction Center to investigate the associations between geographical locations, seasons and temperatures, as well as their influence of the demand of heating systems.
+
+##Context
+The name of data set we’ve selected was “2015 degree days cum total in months” from heating data. The “degreedays” is the absolute value of difference of temperatures and 65F(in mathematical equation: absolute value of (day temperature-65)). The unit in the original data set was months, and we transformed the data by dividing 12 months to four seasons and taking average of each three months. Then, we displayed each state’s average season’s degree in a geographic map and filled it in with colors from dark to light. The lighter the color is , the greater the degreeday, which means the colder the state is. Thus, the lighter color would show that this state is more likely to use heating system in certain season.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
@@ -41,6 +45,7 @@ df.summer <- filter(df.average2, season == "Summer")
 df.Autum <- filter(df.average2, season == "Autum")
 ```
 
+##Winter
 
 ```{r}
 #par(mfrow=c(1,2))
@@ -63,6 +68,10 @@ p + fifty_states_inset_boxes()
 
 ```
 
+From the “Winter Graph” our group found out that compared to the southern part of the United States, the northern part has shallow color. This shallower color means that the degree in these regions is lower. Also, the demand of heating is higher in these regions than others. The consumption of heating materials will also increase in winter season.
+
+##Spring
+
 ```{r }
 ## Spring
 # map_id creates the aesthetic mapping to the state name column in your data
@@ -80,6 +89,10 @@ p <- ggplot(df.spring, aes(map_id = state)) +
 # add border boxes to AK/HI
 p + fifty_states_inset_boxes()
 ```
+
+From the “Spring Graph” our group found out that compared to the southern part of the United States, northern part also has high demand of heating system. However, if we analyzed a specific region in northern part such as Maine, The color in Maine’s region becomes darker compared to Maine’s color in winter which means the demand of heating system is decreasing in spring as temperature goes up.
+
+#Summer
 
 ```{r}
 ##Summer
@@ -99,6 +112,10 @@ p <- ggplot(df.summer, aes(map_id = state)) +
 p + fifty_states_inset_boxes()
 ```
 
+From the “Summer Graph” our group found out that whole United States has dark color which means only a few states need heating system in summer. It is reasonable as during summer, usually the temperature mount to its highest point.
+
+##Autum
+
 ```{r }
 ##Autum
 # map_id creates the aesthetic mapping to the state name column in your data
@@ -117,5 +134,12 @@ p <- ggplot(df.Autum, aes(map_id = state)) +
 p + fifty_states_inset_boxes()
 ```
 
+From the “Autumn Graph” our group found out that it has the same pattern as Spring. It means that northern part has higher demand of heating system compared to southern part of the United States. 
+
+##Conclusion
+To conclude, the demand of heating system seems related with the regions of the state and the degree of state from our graphs. We would suggest to do further investigation of the relationship to confirm its significance. So far our group suggests that government should have stable supply of heating materials when the weather is tough and cold. Also, the government should pay more attention on the repairment and refurbishment of northern part’s heating system devices. It is because the northern part has higher and long-time demand of heating.
+
+##Contribution
+Sijia Li collected and organized the data, Jinghan Cui and Siran Zhao were responsible for coding and drawing the pictures. Kailun Huang wrote the analysis. We gave suggestions to other group members during the whole working process and we had a good time collaborating with each others.
 
 
