@@ -1,0 +1,121 @@
+---
+title: "Degreeday EDA"
+author: "Jinghan Cui, Siran Zhao, Kailun Huang, Sijia Li"
+date: "10/12/2017"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(ggplot2)
+library(maps)
+library(dplyr)
+library(fiftystater)
+library(tidyverse)
+library(reshape2)
+```
+
+```{r}
+df <- read.csv("month_total.csv")
+df <- as.data.frame(df[1:51,1:13])
+df[df == -999] <- 0
+df <- rename(df, state=X)
+df$state <- tolower(df$state)
+df.tidy <- df %>%
+  gather(JAN,FEB,MAR,APR,MAY,JUN, JUL, AUG, SEP, OCT, NOV,DEC, key = "month", value = "total")
+```
+
+```{r}
+data("fifty_states") # this line is optional due to lazy data loading
+#all_states <- map_data("state")
+```
+
+```{r}
+df.tidy$season <- ifelse(df.tidy$month%in%c("DEC","JAN","FEB"),"Winter",ifelse(df.tidy$month%in%c("MAR","APR","MAY"),"Spring",ifelse(df.tidy$month%in%c("JUN","JUL","AUG"),"Summer","Autum")))
+df.average <- aggregate(df.tidy$total,list(df.tidy$state, df.tidy$season), mean)
+colnames(df.average) <- c("state","season","mean")
+df.average2 <- dplyr::select(df.average, state , season , mean)
+df.winter <- filter(df.average2, season == "Winter")
+df.spring <- filter(df.average2, season == "Spring")
+df.summer <- filter(df.average2, season == "Summer")
+df.Autum <- filter(df.average2, season == "Autum")
+```
+
+
+```{r}
+#par(mfrow=c(1,2))
+##Winter
+# map_id creates the aesthetic mapping to the state name column in your data
+p <- ggplot(df.winter, aes(map_id = state)) + 
+  # map points to the fifty_states shape data
+  geom_map(aes(fill = mean), map = fifty_states) + 
+  expand_limits(x = fifty_states$long, y = fifty_states$lat) +
+  coord_map() +
+  scale_x_continuous(breaks = NULL) + 
+  scale_y_continuous(breaks = NULL) +
+  labs(x = "", y = "") +
+  theme(legend.position = "bottom", 
+        panel.background = element_blank()) +
+  scale_fill_distiller(palette = "Oranges")
+
+# add border boxes to AK/HI
+p + fifty_states_inset_boxes()
+
+```
+
+```{r }
+## Spring
+# map_id creates the aesthetic mapping to the state name column in your data
+p <- ggplot(df.spring, aes(map_id = state)) + 
+  # map points to the fifty_states shape data
+  geom_map(aes(fill = mean), map = fifty_states) + 
+  expand_limits(x = fifty_states$long, y = fifty_states$lat) +
+  coord_map() +
+  scale_x_continuous(breaks = NULL) + 
+  scale_y_continuous(breaks = NULL) +
+  labs(x = "", y = "") +
+  theme(legend.position = "bottom", 
+        panel.background = element_blank()) +
+  scale_fill_distiller(palette = "Oranges")
+# add border boxes to AK/HI
+p + fifty_states_inset_boxes()
+```
+
+```{r}
+##Summer
+# map_id creates the aesthetic mapping to the state name column in your data
+p <- ggplot(df.summer, aes(map_id = state)) + 
+  # map points to the fifty_states shape data
+  geom_map(aes(fill = mean), map = fifty_states) + 
+  expand_limits(x = fifty_states$long, y = fifty_states$lat) +
+  coord_map() +
+  scale_x_continuous(breaks = NULL) + 
+  scale_y_continuous(breaks = NULL) +
+  labs(x = "", y = "") +
+  theme(legend.position = "bottom", 
+        panel.background = element_blank()) +
+  scale_fill_distiller(palette = "Oranges")
+# add border boxes to AK/HI
+p + fifty_states_inset_boxes()
+```
+
+```{r }
+##Autum
+# map_id creates the aesthetic mapping to the state name column in your data
+p <- ggplot(df.Autum, aes(map_id = state)) + 
+  # map points to the fifty_states shape data
+  geom_map(aes(fill = mean), map = fifty_states) + 
+  expand_limits(x = fifty_states$long, y = fifty_states$lat) +
+  coord_map() +
+  scale_x_continuous(breaks = NULL) + 
+  scale_y_continuous(breaks = NULL) +
+  labs(x = "", y = "") +
+  theme(legend.position = "bottom", 
+        panel.background = element_blank()) +
+  scale_fill_distiller(palette = "Oranges")
+# add border boxes to AK/HI
+p + fifty_states_inset_boxes()
+```
+
+
+
